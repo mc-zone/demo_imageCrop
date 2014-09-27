@@ -20,7 +20,7 @@ $support_type=array(IMAGETYPE_JPEG , IMAGETYPE_PNG , IMAGETYPE_GIF);
 if(!in_array($type, $support_type,true)) {
     $data['status'] = 0;
     $data['info'] =  "不支持的格式！";
-    echo json_encode($data,JSON_UNESCAPED_UNICODE);
+    echo json_encode($data);
     exit;
 }else{
     switch($type) {
@@ -37,7 +37,7 @@ if(!in_array($type, $support_type,true)) {
         $data['status'] = 0;
         $data['info'] =  "不支持的格式！";
 
-        echo json_encode($data,JSON_UNESCAPED_UNICODE);
+        echo json_encode($data);
         exit;
     }
 
@@ -50,7 +50,7 @@ if(!in_array($type, $support_type,true)) {
     if(false === imagejpeg($copy, $targetPic) ){
         $data['status'] = 0;
         $data['info'] =  "生成裁剪图片失败！请确认保存路径存在且可写！";
-        echo json_encode($data,JSON_UNESCAPED_UNICODE);
+        echo json_encode($data);
         exit;
     } 
 
@@ -61,7 +61,7 @@ if(!in_array($type, $support_type,true)) {
     $data['name'] =  $newName;
     $data['url'] =  'http://'.rtrim($_SERVER['HTTP_HOST'],'/').'/'.$data['path'];
 
-    echo json_encode($data,JSON_UNESCAPED_UNICODE);
+    echo json_encode($data);
     exit;
 
 }
