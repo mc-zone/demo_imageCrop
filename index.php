@@ -291,6 +291,7 @@ $(function(){
                         $("#download").show().prop('href',rst.url).prop('target','_blank');
                         $("#cuted-wrap").show();
                         $("#image-cuted").prop('src',rst.path);
+                        imgArea.setOptions({'disable':true,'hide':true});//去掉选区功能
 
                         alert('图片已裁剪！点击\'下载成品\'可下载！');
                     }
