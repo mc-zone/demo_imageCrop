@@ -145,6 +145,7 @@ $(function(){
             ,'method'    : 'post'
             ,'fileObjName' : 'upload'
             ,'queueSizeLimit' : 1
+            ,'fileSizeLimit' : '1000KB'
             ,'fileTypeExts': '*.gif; *.jpg; *.png; *.jpeg'
             ,'fileTypeDesc': '只允许.gif .jpg .png .jpeg 图片！' 
             ,'onSelect': function(file) {//选择文件后的触发事件
@@ -291,6 +292,7 @@ $(function(){
                         $("#download").show().prop('href',rst.url).prop('target','_blank');
                         $("#cuted-wrap").show();
                         $("#image-cuted").prop('src',rst.path);
+                        imgArea.setOptions({'disable':true,'hide':true});//去掉选区功能
 
                         alert('图片已裁剪！点击\'下载成品\'可下载！');
                     }
