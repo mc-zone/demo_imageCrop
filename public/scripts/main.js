@@ -1,133 +1,13 @@
-<?php
-header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1.
-header('Pragma: no-cache'); // HTTP 1.0.
-header('Expires: 0'); // Proxies.
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="pragma" content="no-cache">  
-<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">  
-<meta http-equiv="expires" content="0">  
-<title>图片上传裁剪</title>
-<link rel="stylesheet" type="text/css" href="public/bootstrap-3.2.0/css/bootstrap.min.css" media="all">
-<link rel="stylesheet" type="text/css" href="public/bootstrap-3.2.0/css/bootstrap-theme.min.css" media="all">
-<link rel="stylesheet" type="text/css" href="public/jquery.imgareaselect-0.9.10/css/imgareaselect-default.css" media="all" >
-<link rel="stylesheet" type="text/css" href="public/uploadify/uploadify.css" media="all" >
-
-<script type="text/javascript">
-if(typeof JSON == 'undefined'){
-    var script = document.createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('src','public/json2.js');
-    document.getElementsByTagName('head')[0].appendChild(script);
-}
-</script>
-
-<script type="text/javascript" src="public/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="public/jquery.imgareaselect-0.9.10/jquery.imgareaselect.min.js"></script>
-
-<script type="text/javascript" src="public/uploadify/jquery.uploadify.js?v=<?php echo mt_rand(0,9999);?>"></script>
-
-<style type="text/css">
-#image-uploaded,
-#image-cuted{
-    position:relative;
-    max-width:100%;
-}
-#cut-preview-wrap{
-    position:relative;
-    display:block;
-    padding:0;
-    margin:0;
-    border:0;
-    width:100%;
-    overflow:hidden;
-}
-#cut-preview{
-    position:absolute;
-    padding:0;
-    margin:0;
-    border:0;
-    top:0;
-    left:0;
-}
-</style>
-</head>
-<body>
-<div class="container">
-    <div class="page-header">
-        <h1>
-            图片上传裁剪 
-        <small>( Uploadify + imgAreaSelect + PHP )</small>
-        <small class="pull-right">by mc-zone</small>
-        </h1>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-3">
-        <label for="">图片上传</label>
-            <a id="init" class="btn btn-sm btn-primary"  href="#">初始化</a>
-
-            <div id="upload-wrap" style="margin-top:40px;display:none;">
-                <input type="file"  id="file" name="file" />
-                <span class="help-block">选择测试图片(1M以内)</span>
-                <p>
-                    <a id="upload" class="btn btn-sm btn-success" style="display:none;" href="#">上传</a>
-                </p>
-            </div>
-        </div>
-        <div class="col-xs-4">
-            <label for="">裁剪区域</label>
-            <div class="row">
-                <div class="col-xs-12" id="uploaded-wrap" style="display:none;">
-                </div>
-                <br>
-                <div class="col-xs-12" id="ratio-wrap" style="margin-top:30px;display:none;">
-                    <div id="ratio-input" class="input-group">
-                        <span class="input-group-addon">裁剪宽高比</span>
-                        <input type="text" id="ratio" class="form-control" placeholder="Ratio" value="1.33">
-                     </div>
-                    <span id="cut-help" class="help-block">输入宽高比进行裁剪初始化。例如1.33</span>
-                    <p>
-                        <a id="cutInit" class="btn btn-info" href="#">裁剪区域初始化</a>
-                        <a id="cut" style="display:none;" class="btn btn-warning" href="#">确定裁剪区</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-4" id="preview-wrap" style="display:none;">
-            <label for="">裁剪预览</label>
-            <div id="cut-preview-wrap">
-                <img id="cut-preview" src="" alt="">
-            </div>
-            <p>
-                <small id="log"></small>
-            </p>
-            
-        </div>
-    </div>
-
-    <div class="row" id="cuted-wrap" style="display:none;">
-        <div class="col-xs-offset-2 col-xs-8 text-center">
-            <div class="page-header">
-                <h4>成品</h4>
-            </div>
-            <p>
-                <img id="image-cuted" src="" alt="">
-            </p>
-            <p>
-                <a id="download" style="display:none;" class="btn btn-block btn-danger" href="#">下载成品</a>
-            </p>
-
-        </div>
-    </div>
-
-</div>
-
-<script type="text/javascript">
-$(function(){
+requirejs.config({
+    baseUrl: 'public/scripts/',
+    paths: {
+        jquery:'jquery-1.10.2.min',
+        imgareaselect:'jquery.imgareaselect-0.9.10/jquery.imgareaselect.min',
+        uploadify:'uploadify/jquery.uploadify.min'
+    }
+});
+//调用依赖
+require(["jquery","imgareaselect","uploadify"], function($,select,uploadify) {
     var $field = $("input[type='file']");
 
     //Uploadify上传插件初始化
@@ -138,7 +18,7 @@ $(function(){
 
         $field.uploadify({
              'buttonText': '选择图片'
-            ,'swf': 'public/uploadify/uploadify.swf?v=' + ( parseInt(Math.random()*1000) )
+            ,'swf': 'public/scripts/uploadify/uploadify.swf?v=' + ( parseInt(Math.random()*1000) )
             ,'uploader'  : 'receive.php'
             ,'auto'      : false    
             ,'multi'     : false   
@@ -155,7 +35,6 @@ $(function(){
                 $field.uploadify('disable', true);
                 $("#upload").remove();
 
-                //console.log(data);
                 var rst =JSON.parse(data);
 
                 if( rst.status == 0 ){
@@ -165,6 +44,10 @@ $(function(){
                     var $image = $("<img src='"+imageData.path+"' id='image-uploaded' data-width='"+imageData.width+"' data-height='"+imageData.height+"' data-name='"+imageData.name+"' />");
                     $("#uploaded-wrap").append( $image ).show();
                     $("#ratio-wrap").show();
+                    $image.bind('click',function(e){
+                        e.preventDefault();
+                        alert('请先设置裁剪宽高比！');
+                    });
 
                 }
             }
@@ -209,6 +92,7 @@ $(function(){
         $("#ratio-input").hide();
         $("#cut-help").text('图片宽:'+realWidth+' 高:'+realHeight+' 裁剪比例:'+ratio+' 在图片上进行拖拽确定裁剪区域！');
         $("#preview-wrap").show();
+        $uploaded.unbind('click');
 
         //预览框宽高参数
         var previewWrapWidth = $previewWrap.outerWidth();
@@ -304,6 +188,3 @@ $(function(){
     });
 });
 
-</script>
-</body>
-</html>
