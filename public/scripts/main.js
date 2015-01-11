@@ -4,10 +4,21 @@ requirejs.config({
         jquery:'jquery-1.10.2.min',
         imgareaselect:'jquery.imgareaselect-0.9.10/jquery.imgareaselect.min',
         uploadify:'uploadify/jquery.uploadify.min'
+    },
+    shim:{
+        'imgareaselect':['jquery'],
+        'uploadify':['jquery']
     }
 });
+var requireApp = ["jquery","imgareaselect","uploadify"];
+//JSON检测
+if(  typeof JSON === 'undefined' ){
+    requireApp.push('json2');
+}
+
 //调用依赖
-require(["jquery","imgareaselect","uploadify"], function($,select,uploadify) {
+require(requireApp, function($) {
+    var $ = $.noConflict();
     var $field = $("input[type='file']");
 
     //Uploadify上传插件初始化
@@ -90,7 +101,7 @@ require(["jquery","imgareaselect","uploadify"], function($,select,uploadify) {
         //其他操作
         $(this).hide();
         $("#ratio-input").hide();
-        $("#cut-help").text('图片宽:'+realWidth+' 高:'+realHeight+' 裁剪比例:'+ratio+' 在图片上进行拖拽确定裁剪区域！');
+        $("#cut-help").html('图片宽:'+realWidth+' 高:'+realHeight+' 裁剪比例:'+ratio+'<strong style="color:red;"> 在图片上进行拖拽确定裁剪区域！</strong>');
         $("#preview-wrap").show();
         $uploaded.unbind('click');
 
