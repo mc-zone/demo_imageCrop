@@ -15,7 +15,6 @@ var requireApp = ["jquery","imgareaselect","uploadify"];
 if(  typeof JSON === 'undefined' ){
     requireApp.push('json2');
 }
-
 //调用依赖
 require(requireApp, function($) {
     var $ = $.noConflict();
@@ -47,7 +46,6 @@ require(requireApp, function($) {
                 $("#upload").remove();
 
                 var rst =JSON.parse(data);
-
                 if( rst.status == 0 ){
                     alert('上传失败:'+rst.info);
                 }else{
@@ -59,7 +57,6 @@ require(requireApp, function($) {
                         e.preventDefault();
                         alert('请先设置裁剪宽高比！');
                     });
-
                 }
             }
             ,'onUploadError' : function(file, errorCode, errorMsg, errorString){
@@ -97,7 +94,6 @@ require(requireApp, function($) {
             uploadedHeight = $uploaded.outerHeight(),
             uploadedRate = uploadedWidth/realWidth; //缩放比例
 
-        
         //其他操作
         $(this).hide();
         $("#ratio-input").hide();
@@ -114,10 +110,8 @@ require(requireApp, function($) {
             width:previewWrapWidth+'px',
             height:previewWrapHeight+'px'
         } );
-
         //初始化预览图
         $preview.prop( 'src',$uploaded.attr('src') );
-
 
         //构造AreaSelect选择器
         var imgArea = $uploaded.imgAreaSelect({
@@ -125,10 +119,8 @@ require(requireApp, function($) {
             handles: true,   
             fadeSpeed: 300,
             aspectRatio:'1:'+(1/ratio),
-            onSelectChange: function(img,selection){//选区改变时的触发事件
-                //selection包括x1,y1,x2,y2,width,height，分别为选区的偏移和高宽。
-                //console.log(selection);
-
+            //选区改变时的触发事件
+            onSelectChange: function(img,selection){//selection包括x1,y1,x2,y2,width,height，分别为选区的偏移和高宽。
                 var rate = previewWrapWidth/selection.width;//预览区相对于选择区的倍数
                 $preview.css({
                     width: Math.round(uploadedWidth*rate)+'px',
@@ -144,18 +136,14 @@ require(requireApp, function($) {
                     offsetLeft:Math.round(selection.x1/uploadedRate),
                     offsetTop: Math.round(selection.y1/uploadedRate)
                 }
-
                 $("#log").text('实际裁剪参数 - 宽:'+realSize.width+
                                 ' 高:'+realSize.height+
                                 ' 左偏移:'+realSize.offsetLeft+
                                 ' 上偏移:'+realSize.offsetTop
                             );
-
                 $preview.data( realSize );
-
             }
         });
-
 
         //点击确认裁剪时
         $("#cut").show().click(function(e){
@@ -178,7 +166,6 @@ require(requireApp, function($) {
                 type:'POST',
                 data:data,
                 success: function(data){
-                    //console.log(data);
                     var rst = JSON.parse(data);
                     if( rst.status == 0 ){
                         alert('失败!'+rst.info);
@@ -192,10 +179,8 @@ require(requireApp, function($) {
                         alert('图片已裁剪！点击\'下载成品\'可下载！');
                     }
                 }
-                 
             });
         });
-
     });
 });
 
